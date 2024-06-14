@@ -14,7 +14,7 @@ const database = require('./database');
 async function getInfo(username) {
     try {
         let data;
-        const sql = `SELECT username, email FROM users WHERE BINARY username = ?`,
+        const sql = `SELECT username, email FROM users WHERE username = ?`,
             result = await database.query(sql, [username]),
             is_valid = !!result.length,
             message = is_valid ? 'Success.' : 'No information found.';

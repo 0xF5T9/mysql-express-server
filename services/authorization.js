@@ -11,7 +11,7 @@ const database = require('./database'),
  * Verify account credentials.
  * @param {String} username Account username.
  * @param {String} password Account password.
- * @returns {Promise<{success: Boolean, isServerError: Boolean, message: String, data:?Object}>} Returns the result object.
+ * @returns {Promise<{success: Boolean, isServerError: Boolean, message: String, data: ?Object}>} Returns the result object.
  */
 async function verifyAccount(username, password) {
     try {
@@ -19,7 +19,7 @@ async function verifyAccount(username, password) {
         const sql = `SELECT c.username, u.email
                      FROM credentials c JOIN users u 
                      ON c.username = u.username 
-                     WHERE BINARY c.username = ? AND BINARY c.password = ?`,
+                     WHERE c.username = ? AND BINARY c.password = ?`,
             result = await database.query(sql, [username, password]),
             is_valid = !!result.length,
             message = is_valid
@@ -56,7 +56,7 @@ function authenticate(request, result, next) {
             verifyResult = jwt.verify(token, process.env.SECRET_KEY);
 
         const { username } = request.params;
-        if (username !== verifyResult.username)
+        if (username.toLowerCase() !== verifyResult.username.toLowerCase())
             return result.status(401).json({ message: 'Unauthorized access.' });
         request.params.username = verifyResult.username;
         next();
