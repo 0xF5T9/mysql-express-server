@@ -26,11 +26,13 @@ app.use(
 
 // API endpoints:
 const authorizationRouter = require('./routes/authorization'),
+    registerRouter = require('./routes/register'),
     userRouter = require('./routes/user');
 app.get('/', (request, result) => {
     return result.status(200).json({ message: 'ok' });
 });
 app.use('/authorize', authorizationRouter);
+app.use('/register', registerRouter);
 app.use('/user', userRouter);
 
 // Error-handling middleware.
