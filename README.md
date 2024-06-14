@@ -1,7 +1,16 @@
-# mysql-express-server
-MySQL Server deployed with node.js express.
+> MySQL Server deployed with node.js express.
+# Prerequisites
+* npm >= v10.5.2
+* node >= v20.13.1
+* MySQL >= v8.4.0
 
-# Environment variables
+# Install
+## 1. Install dependencies
+```
+npm install
+```
+
+## 2. Set environment variables
 ```
 MYSQL_HOST=
 MYSQL_USER=
@@ -10,7 +19,8 @@ MYSQL_DATABASE=
 SECRET_KEY=
 NODE_ENV=development
 ```
-# DATABASE TABLES
+
+## 3. Create MySQL tables
 ```sql
 -- Users table.
 CREATE TABLE `users` (
@@ -31,4 +41,9 @@ CREATE TABLE `credentials` (
   UNIQUE KEY `username` (`username`),
   CONSTRAINT `fk_username` FOREIGN KEY (`username`) REFERENCES `users` (`username`) ON UPDATE CASCADE
 );
+```
+
+# Usage
+```
+npm start
 ```
