@@ -14,8 +14,8 @@ const database = require('./database'),
 
 /**
  * Get the posts.
- * @param {Number} [page=1] Pagination.
- * @returns {Result} Returns the result object.
+ * @param {Number=} [page=1] Pagination.
+ * @returns {Promise<Result>} Returns the result object.
  */
 async function getPosts(page = 1) {
     try {
