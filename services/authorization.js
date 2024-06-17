@@ -5,37 +5,43 @@
 
 'use strict';
 const database = require('./database'),
-    jwt = require('jsonwebtoken');
+    jwt = require('jsonwebtoken'),
+    {
+        ServiceError: Error,
+        ServiceResult: Result,
+    } = require('../utility/services');
 
 /**
  * Verify account credentials.
  * @param {String} username Account username.
  * @param {String} password Account password.
- * @returns {Promise<{success: Boolean, isServerError: Boolean, message: String, data: ?Object}>} Returns the result object.
+ * @returns {Promise<Result>} Returns the result object.
  */
 async function verifyAccount(username, password) {
     try {
-        let data;
         const sql = `SELECT c.username, u.email
                      FROM credentials c JOIN users u 
                      ON c.username = u.username 
-                     WHERE c.username = ? AND BINARY c.password = ?`,
-            result = await database.query(sql, [username, password]),
-            is_valid = !!result.length,
-            message = is_valid
-                ? 'Account credentials verified.'
-                : 'Invalid account credentials.';
-        data = is_valid ? result[0] : null;
+                     WHERE c.username = ? AND BINARY c.password = ?`;
 
-        return { success: is_valid, isServerError: false, message, data };
+        const result = await database.query(sql, [username, password]);
+
+        if (!!!result.length) throw new Error('Invalid account credentials.');
+        const user = result[0];
+
+        return new Result('Account credentials verified.', true, user);
     } catch (error) {
         console.error(error);
-        return {
-            success: false,
-            isServerError: true,
-            message: 'Unexpected server error occurred.',
-            data: null,
-        };
+        if (error.isServerError === undefined) error.isServerError = true;
+
+        return new Result(
+            error.isServerError === false
+                ? error.message
+                : 'Unexpected server error has occurred.',
+            false,
+            null,
+            error.isServerError
+        );
     }
 }
 

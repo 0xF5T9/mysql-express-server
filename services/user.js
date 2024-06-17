@@ -4,31 +4,44 @@
  */
 
 'use strict';
-const database = require('./database');
+const database = require('./database'),
+    {
+        ServiceError: Error,
+        ServiceResult: Result,
+    } = require('../utility/services');
 
 /**
  * Get the user information.
  * @param {String} username Username.
- * @returns {Promise<{success: Boolean, isServerError: Boolean, message: String, data:?Object}>} Returns the result object.
+ * @returns {Promise<Result>} Returns the result object.
  */
 async function getInfo(username) {
     try {
-        let data;
-        const sql = `SELECT username, email FROM users WHERE username = ?`,
-            result = await database.query(sql, [username]),
-            is_valid = !!result.length,
-            message = is_valid ? 'Success.' : 'No information found.';
-        data = is_valid ? result[0] : null;
+        const sql = `SELECT username, email FROM users WHERE username = ?`;
 
-        return { success: is_valid, isServerError: false, message, data };
+        const result = await database.query(sql, [username]);
+        if (!!!result.length)
+            throw new Error('No user information were found.', true);
+
+        const user_info = result[0];
+
+        return new Result(
+            'Successfully retrieved the user information.',
+            true,
+            user_info
+        );
     } catch (error) {
         console.error(error);
-        return {
-            success: false,
-            isServerError: true,
-            message: 'Unexpected server error occurred.',
-            data: null,
-        };
+        if (error.isServerError === undefined) error.isServerError = true;
+
+        return new Result(
+            error.isServerError === false
+                ? error.message
+                : 'Unexpeced server error has occurred.',
+            false,
+            null,
+            error.isServerError
+        );
     }
 }
 

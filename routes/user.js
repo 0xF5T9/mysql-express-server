@@ -12,14 +12,15 @@ const express = require('express'),
 // Get user information.
 router.get('/:username', authenticate, async function (request, result, next) {
     const { username } = request.params;
+
     const user_result = await userService.getInfo(username);
     if (!user_result.success)
-        return result.status(user_result.isServerError ? 500 : 502).json({
+        return result.status(user_result.statusCode).json({
             message: user_result.message,
         });
 
-    return result.status(200).json({
-        message: 'Successfully retrieved the user data.',
+    return result.status(user_result.statusCode).json({
+        message: user_result.message,
         data: user_result.data,
     });
 });

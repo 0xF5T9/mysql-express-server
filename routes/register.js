@@ -17,13 +17,13 @@ router.post('/', async function (request, result, next) {
             message: 'Account information was not provided or was incomplete.',
         });
 
-    const input_validate_result = registerService.validateRegisterInput(
+    const input_validate_result = await registerService.validateRegisterInput(
         username,
         password,
         email
     );
     if (!input_validate_result.success)
-        return result.status(400).json({
+        return result.status(input_validate_result.statusCode).json({
             message: input_validate_result.message,
         });
 
@@ -31,10 +31,10 @@ router.post('/', async function (request, result, next) {
         username,
         email
     );
-    if (duplicate_result.isDuplicate)
-        return result.status(400).json({ message: duplicate_result.message });
-    else if (duplicate_result.isServerError)
-        return result.status(500).json({ message: duplicate_result.message });
+    if (!duplicate_result.success)
+        return result.status(duplicate_result.statusCode).json({
+            message: duplicate_result.message,
+        });
 
     const register_result = await registerService.createAccount(
         username,
@@ -43,7 +43,7 @@ router.post('/', async function (request, result, next) {
     );
     if (!register_result.success)
         return result
-            .status(register_result.isServerError ? 500 : 400)
+            .status(register_result.statusCode)
             .json({ message: register_result.message });
 
     return result.status(201).json({

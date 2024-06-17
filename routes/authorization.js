@@ -25,7 +25,7 @@ router.post('/', async function (request, result, next) {
     );
     if (!verify_result.success)
         return result
-            .status(verify_result.isServerError ? 500 : 401)
+            .status(verify_result.statusCode)
             .json({ message: verify_result.message });
 
     const token = jwt.sign(
@@ -37,7 +37,7 @@ router.post('/', async function (request, result, next) {
         { expiresIn: '1h' }
     );
 
-    return result.status(200).json({
+    return result.status(verify_result.statusCode).json({
         message: 'Successfully authorized.',
         token,
     });
