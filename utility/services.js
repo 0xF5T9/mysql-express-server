@@ -12,14 +12,12 @@ class ServiceError extends Error {
     /**
      * Constructs a service error object.
      * @param {String} [message=''] Error message.
-     * @param {Boolean} [isServerError=false] Specifies whether a server error has occurred.
+     * @param {Boolean=} [isServerError=false] Specifies whether a server error has occurred.
      * @returns {Object} Returns the error object.
      */
     constructor(message = '', isServerError = false) {
         super(message);
-        this.message = isServerError
-            ? 'Unexpected server error has occurred.'
-            : message;
+        this.message = message;
         this.isServerError = isServerError;
     }
 }
@@ -32,8 +30,8 @@ class ServiceResult {
      * Constructs a service result object.
      * @param {String} [message=''] Result message.
      * @param {Boolean} [success=false] Specifies whether the action is successful.
-     * @param {Object?} [data=null] Result associated data.
-     * @param {Boolean} [isServerError=false] Specifies whether a server error has occurred.
+     * @param {Object=} [data=null] Result associated data.
+     * @param {Boolean=} [isServerError=false] Specifies whether a server error has occurred.
      * @returns {Object} Returns the result object.
      */
     constructor(
