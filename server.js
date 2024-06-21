@@ -1,21 +1,18 @@
 /**
  * @file server.js
- * @description MySQL Server application (Express).
+ * @description Start the MySQL Server using Express.
  */
 
 'use strict';
 
-// Loads environment variables from the .env file into process.env
-// https://stackoverflow.com/questions/44915758/node-process-env-variable-name-returning-undefined
-const dotenv = require('dotenv');
-dotenv.config({ path: './.env' });
-
+// External module(s).
+const dotenv = require('dotenv'); // Loads environment variables from the .env file into process.env
+dotenv.config({ path: './.env' }); // https://stackoverflow.com/questions/44915758/node-process-env-variable-name-returning-undefined
 const express = require('express'),
     cors = require('cors');
 
 // Express configurations.
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 app.use(
@@ -24,7 +21,7 @@ app.use(
     })
 );
 
-// API endpoints:
+// Routes (Endpoints):
 const authorizationRouter = require('./routes/authorization'),
     registerRouter = require('./routes/register'),
     userRouter = require('./routes/user'),
@@ -45,7 +42,6 @@ app.use((error, request, result, next) => {
     const status_code = error.statusCode || 500;
     console.error(error.message, error.stack);
     result.status(status_code).json({ message: error.message });
-    return;
 });
 
 // Launch server.
