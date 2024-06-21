@@ -49,7 +49,7 @@ app.use((error, request, result, next) => {
 });
 
 // Launch server.
-const port = 8081;
+const port = 1284;
 app.listen(port, () => {
     console.log(`MySQL Server is listening on port ${port}.`);
 });
