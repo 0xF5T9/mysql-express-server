@@ -37,11 +37,10 @@ app.use('/test', testRouter);
 // Error-handling middleware.
 app.use((error, request, result, next) => {
     console.error(
-        'THIS ERROR IS CAPTURED BY SPECIAL ERROR-HANDLING MIDDLEWARE.'
+        `THIS ERROR IS CAPTURED BY THE DEFAULT ERROR-HANDLING MIDDLEWARE.\n`,
+        error
     );
-    const status_code = error.statusCode || 500;
-    console.error(error.message, error.stack);
-    result.status(status_code).json({ message: error.message });
+    result.status(error.status || 500).json({ message: error.message });
 });
 
 // Launch server.
