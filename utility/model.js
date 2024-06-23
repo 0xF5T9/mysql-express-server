@@ -1,16 +1,16 @@
 /**
- * @file services.js
- * @description Utility classes and functions used by service functions.
+ * @file model.js
+ * @description Utility classes and functions used by models.
  */
 
 'use strict';
 
 /**
- * Service error object.
+ * Model error object.
  */
-class ServiceError extends Error {
+class ModelError extends Error {
     /**
-     * Constructs a service error object.
+     * Constructs a model error object.
      * @param {String} [message=''] Error message.
      * @param {Boolean=} [isServerError=false] Specifies whether a server error has occurred.
      * @returns {Object} Returns the error object.
@@ -23,16 +23,16 @@ class ServiceError extends Error {
 }
 
 /**
- * Service result object.
+ * Model response object.
  */
-class ServiceResult {
+class ModelResponse {
     /**
-     * Constructs a service result object.
-     * @param {String} [message=''] Result message.
+     * Constructs a model response object.
+     * @param {String} [message=''] Response message.
      * @param {Boolean} [success=false] Specifies whether the action is successful.
-     * @param {Object=} [data=null] Result associated data.
+     * @param {Object=} [data=null] Response associated data.
      * @param {Boolean=} [isServerError=false] Specifies whether a server error has occurred.
-     * @returns {Object} Returns the result object.
+     * @returns {Object} Returns the response object.
      */
     constructor(
         message = '',
@@ -81,8 +81,8 @@ function isValidDate(stringDate) {
 }
 
 module.exports = {
-    ServiceError,
-    ServiceResult,
+    ModelError,
+    ModelResponse,
     getOffset,
     isValidDate,
 };

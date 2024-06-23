@@ -1,6 +1,6 @@
 /**
  * @file config.js
- * @description Server configuration parameters.
+ * @description Server configuration.
  */
 
 'use strict';

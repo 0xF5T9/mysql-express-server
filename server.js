@@ -21,18 +21,9 @@ app.use(
     })
 );
 
-// Routes (Endpoints):
-const authorizationRouter = require('./routes/authorization'),
-    registerRouter = require('./routes/register'),
-    userRouter = require('./routes/user'),
-    testRouter = require('./routes/test');
-app.get('/', (request, result) => {
-    return result.status(200).json({ message: 'ok' });
-});
-app.use('/authorize', authorizationRouter);
-app.use('/register', registerRouter);
-app.use('/user', userRouter);
-app.use('/test', testRouter);
+// Initialize routers.
+const routers = require('./routers');
+routers(app);
 
 // Error-handling middleware.
 app.use((error, request, result, next) => {

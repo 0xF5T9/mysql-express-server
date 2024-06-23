@@ -1,19 +1,19 @@
 /**
  * @file user.js
- * @description User services.
+ * @description User router models.
  */
 
 'use strict';
-const database = require('./database'),
+const database = require('../services/database'),
     {
-        ServiceError: Error,
-        ServiceResult: Result,
-    } = require('../utility/services');
+        ModelError: Error,
+        ModelResponse: Response,
+    } = require('../utility/model');
 
 /**
  * Get the user information.
  * @param {String} username Username.
- * @returns {Promise<Result>} Returns the result object.
+ * @returns {Promise<Response>} Returns the response object.
  */
 async function getInfo(username) {
     try {
@@ -25,7 +25,7 @@ async function getInfo(username) {
 
         const user_info = result[0];
 
-        return new Result(
+        return new Response(
             'Successfully retrieved the user information.',
             true,
             user_info
@@ -34,7 +34,7 @@ async function getInfo(username) {
         console.error(error);
         if (error.isServerError === undefined) error.isServerError = true;
 
-        return new Result(
+        return new Response(
             error.isServerError === false
                 ? error.message
                 : 'Unexpeced server error has occurred.',

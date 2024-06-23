@@ -1,21 +1,21 @@
 /**
  * @file test.js
- * @description Test services.
+ * @description Test router models.
  */
 
 'use strict';
-const database = require('./database'),
+const database = require('../services/database'),
     { itemPerPage } = require('../config'),
     {
-        ServiceError: Error,
-        ServiceResult: Result,
+        ModelError: Error,
+        ModelResponse: Response,
         getOffset,
-    } = require('../utility/services');
+    } = require('../utility/model');
 
 /**
  * Get the posts.
  * @param {Number=} [page=1] Pagination.
- * @returns {Promise<Result>} Returns the result object.
+ * @returns {Promise<Response>} Returns the response object.
  */
 async function getPosts(page = 1) {
     try {
@@ -33,7 +33,7 @@ async function getPosts(page = 1) {
         const posts = result || [],
             meta = { page, totalPosts: result.length };
 
-        return new Result('Successfully retrieved the posts data.', true, {
+        return new Response('Successfully retrieved the posts data.', true, {
             posts,
             meta,
         });
@@ -41,7 +41,7 @@ async function getPosts(page = 1) {
         console.error(error);
         if (error.isServerError === undefined) error.isServerError = true;
 
-        return new Result(
+        return new Response(
             error.isServerError === false
                 ? error.message
                 : 'Unexpected server error has occurred.',

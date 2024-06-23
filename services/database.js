@@ -1,8 +1,6 @@
 /**
  * @file database.js
- * @description Database query services.
- * @note Should be only used by route services
- *       and not to be exposed directly to public endpoint.
+ * @description Database services used by models.
  */
 
 'use strict';

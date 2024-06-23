@@ -1,21 +1,21 @@
 /**
  * @file register.js
- * @description Register services.
+ * @description Register router models.
  */
 
 'use strict';
-const database = require('./database'),
+const database = require('../services/database'),
     {
-        ServiceError: Error,
-        ServiceResult: Result,
-    } = require('../utility/services');
+        ModelError: Error,
+        ModelResponse: Response,
+    } = require('../utility/model');
 
 /**
  * Validate the register input.
  * @param {String} username Account username.
  * @param {String} password Account password.
  * @param {String} email Account email.
- * @returns {Promise<Result>} Returns the result object.
+ * @returns {Promise<Response>} Returns the response object.
  */
 async function validateRegisterInput(username, password, email) {
     try {
@@ -37,12 +37,12 @@ async function validateRegisterInput(username, password, email) {
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
             throw new Error('The email address is invalid.');
 
-        return new Result('Successfully.', true);
+        return new Response('Successfully.', true);
     } catch (error) {
         console.error(error);
         if (error.isServerError === undefined) error.isServerError = true;
 
-        return new Result(
+        return new Response(
             error.isServerError === false
                 ? error.message
                 : 'Unexpected server error has occurred.',
@@ -57,7 +57,7 @@ async function validateRegisterInput(username, password, email) {
  * Check if the account information is duplicate.
  * @param {String} username Account username.
  * @param {String} email Account email.
- * @return {Promise<Result>} Returns the result object.
+ * @return {Promise<Response>} Returns the response object.
  */
 async function checkDuplicate(username, email) {
     try {
@@ -69,12 +69,15 @@ async function checkDuplicate(username, email) {
             email_result = await database.query(email_sql, [email]);
         if (email_result.length) throw new Error('Email already exists.');
 
-        return new Result('All tests passed, no duplicates were found.', true);
+        return new Response(
+            'All tests passed, no duplicates were found.',
+            true
+        );
     } catch (error) {
         console.error(error);
         if (error.isServerError === undefined) error.isServerError = true;
 
-        return new Result(
+        return new Response(
             error.isServerError === false
                 ? error.message
                 : 'Unexpeced server error has occurred.',
@@ -90,7 +93,7 @@ async function checkDuplicate(username, email) {
  * @param {String} username Account username.
  * @param {String} password Account password.
  * @param {String} email Account email.
- * @returns {Promise<Result>} Returns the result object.
+ * @returns {Promise<Response>} Returns the response object.
  */
 async function createAccount(username, password, email) {
     let user_insert_id;
@@ -115,7 +118,7 @@ async function createAccount(username, password, email) {
                 true
             );
 
-        return new Result('Successfully created the account.', true);
+        return new Response('Successfully created the account.', true);
     } catch (error) {
         if (user_insert_id)
             await database.query(
@@ -124,7 +127,7 @@ async function createAccount(username, password, email) {
         console.error(error);
         if (error.isServerError === undefined) error.isServerError = true;
 
-        return new Result(
+        return new Response(
             error.isServerError === false
                 ? error.message
                 : 'Unexpected server error has occurred.',

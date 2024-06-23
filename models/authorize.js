@@ -1,21 +1,21 @@
 /**
- * @file authorization.js
- * @description Authorization services.
+ * @file authorize.js
+ * @description Authorize router models.
  */
 
 'use strict';
-const database = require('./database'),
+const database = require('../services/database'),
     jwt = require('jsonwebtoken'),
     {
-        ServiceError: Error,
-        ServiceResult: Result,
-    } = require('../utility/services');
+        ModelError: Error,
+        ModelResponse: Response,
+    } = require('../utility/model');
 
 /**
  * Verify account credentials.
  * @param {String} username Account username.
  * @param {String} password Account password.
- * @returns {Promise<Result>} Returns the result object.
+ * @returns {Promise<Response>} Returns the response object.
  */
 async function verifyAccount(username, password) {
     try {
@@ -29,12 +29,12 @@ async function verifyAccount(username, password) {
         if (!!!result.length) throw new Error('Invalid account credentials.');
         const user = result[0];
 
-        return new Result('Account credentials verified.', true, user);
+        return new Response('Account credentials verified.', true, user);
     } catch (error) {
         console.error(error);
         if (error.isServerError === undefined) error.isServerError = true;
 
-        return new Result(
+        return new Response(
             error.isServerError === false
                 ? error.message
                 : 'Unexpected server error has occurred.',
@@ -48,14 +48,14 @@ async function verifyAccount(username, password) {
 /**
  * Authenticate middleware for protect API endpoints from unauthorized access.
  * @param {Object} request Express middleware request object.
- * @param {Object} result Express middleware result object.
+ * @param {Object} response Express middleware response object.
  * @param {Function} next Express middleware next() function.
- * @returns {Object} Returns the result object.
+ * @returns {Object} Returns the response object.
  */
-function authenticate(request, result, next) {
+function authenticate(request, response, next) {
     const full_token = request.get('Authorization');
     if (!full_token)
-        return result.status(400).json({ message: 'No token was provided.' });
+        return response.status(400).json({ message: 'No token was provided.' });
 
     try {
         const token = full_token.split(' ')[1],
@@ -63,12 +63,14 @@ function authenticate(request, result, next) {
 
         const { username } = request.params;
         if (username.toLowerCase() !== verifyResult.username.toLowerCase())
-            return result.status(401).json({ message: 'Unauthorized access.' });
+            return response
+                .status(401)
+                .json({ message: 'Unauthorized access.' });
         request.params.username = verifyResult.username;
         next();
     } catch (error) {
         console.error(error);
-        return result
+        return response
             .status(401)
             .json({ message: 'Authenticate: ' + error.message });
     }
