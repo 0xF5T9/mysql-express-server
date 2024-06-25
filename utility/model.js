@@ -13,12 +13,14 @@ class ModelError extends Error {
      * Constructs a model error object.
      * @param {String} [message=''] Error message.
      * @param {Boolean=} [isServerError=false] Specifies whether a server error has occurred.
+     * @param {Number=} [statusCode=undefined] Specifies a specific http status code for the error.
      * @returns {Object} Returns the error object.
      */
-    constructor(message = '', isServerError = false) {
+    constructor(message = '', isServerError = false, statusCode = undefined) {
         super(message);
         this.message = message;
         this.isServerError = isServerError;
+        this.statusCode = statusCode;
     }
 }
 
@@ -32,19 +34,28 @@ class ModelResponse {
      * @param {Boolean} [success=false] Specifies whether the action is successful.
      * @param {Object=} [data=null] Response associated data.
      * @param {Boolean=} [isServerError=false] Specifies whether a server error has occurred.
+     * @param {Number=} [statusCode=undefined] Specifies a specific http status code.
+     *                                         If not specified, it will be automatically filled in.
      * @returns {Object} Returns the response object.
      */
     constructor(
         message = '',
         success = false,
         data = null,
-        isServerError = false
+        isServerError = false,
+        statusCode = undefined
     ) {
         this.message = message;
         this.success = success;
         this.data = data;
         this.isServerError = isServerError;
-        this.statusCode = isServerError ? 500 : success ? 200 : 400;
+        this.statusCode = statusCode
+            ? statusCode
+            : isServerError
+              ? 500
+              : success
+                ? 200
+                : 400;
     }
 }
 
