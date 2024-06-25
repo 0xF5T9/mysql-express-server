@@ -48,7 +48,8 @@ async function validateRegisterInput(username, password, email) {
                 : 'Unexpected server error has occurred.',
             false,
             null,
-            error.isServerError
+            error.isServerError,
+            error.statusCode
         );
     }
 }
@@ -83,7 +84,8 @@ async function checkDuplicate(username, email) {
                 : 'Unexpeced server error has occurred.',
             false,
             null,
-            error.isServerError
+            error.isServerError,
+            error.statusCode
         );
     }
 }
@@ -133,7 +135,8 @@ async function createAccount(username, password, email) {
                 : 'Unexpected server error has occurred.',
             false,
             null,
-            error.isServerError
+            error.isServerError,
+            error.statusCode
         );
     }
 }

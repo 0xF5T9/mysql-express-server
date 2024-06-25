@@ -26,7 +26,8 @@ async function verifyAccount(username, password) {
 
         const result = await database.query(sql, [username, password]);
 
-        if (!!!result.length) throw new Error('Invalid account credentials.');
+        if (!!!result.length)
+            throw new Error('Invalid account credentials.', false, 401);
         const user = result[0];
 
         return new Response('Account credentials verified.', true, user);
@@ -40,7 +41,8 @@ async function verifyAccount(username, password) {
                 : 'Unexpected server error has occurred.',
             false,
             null,
-            error.isServerError
+            error.isServerError,
+            error.statusCode
         );
     }
 }

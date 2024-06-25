@@ -47,7 +47,8 @@ async function getPosts(page = 1) {
                 : 'Unexpected server error has occurred.',
             false,
             null,
-            error.isServerError
+            error.isServerError,
+            error.statusCode
         );
     }
 }

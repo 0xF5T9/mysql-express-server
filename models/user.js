@@ -40,7 +40,8 @@ async function getInfo(username) {
                 : 'Unexpeced server error has occurred.',
             false,
             null,
-            error.isServerError
+            error.isServerError,
+            error.statusCode
         );
     }
 }
