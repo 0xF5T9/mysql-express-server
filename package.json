@@ -1,10 +1,10 @@
 {
     "name": "mysql-server",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "./sources/server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon server.js"
+        "start": "nodemon ./sources/server.js"
     },
     "keywords": [],
     "author": "",

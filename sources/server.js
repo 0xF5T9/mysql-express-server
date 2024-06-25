@@ -7,7 +7,9 @@
 
 // External module(s).
 const dotenv = require('dotenv'); // Loads environment variables from the .env file into process.env
-dotenv.config({ path: './.env' }); // https://stackoverflow.com/questions/44915758/node-process-env-variable-name-returning-undefined
+dotenv.config({
+    path: '.env',
+}); // https://stackoverflow.com/questions/44915758/node-process-env-variable-name-returning-undefined
 const express = require('express'),
     cors = require('cors');
 
