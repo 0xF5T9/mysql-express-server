@@ -24,7 +24,7 @@ app.use(
 );
 
 // Initialize routers.
-const routers = require('./routers');
+const routers = require('../sources/routers');
 routers(app);
 
 // Error-handling middleware.

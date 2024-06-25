@@ -1,10 +1,10 @@
 {
-    "name": "mysql-server",
+    "name": "mysql-express-server",
     "version": "1.0.0",
-    "main": "./sources/server.js",
+    "main": "./expressjs/server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon ./sources/server.js"
+        "start": "nodemon ./expressjs/server.js"
     },
     "keywords": [],
     "author": "",
