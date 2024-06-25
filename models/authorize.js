@@ -15,7 +15,7 @@ const database = require('../services/database'),
  * Verify account credentials.
  * @param {String} username Account username.
  * @param {String} password Account password.
- * @returns {Promise<Response>} Returns the response object.
+ * @returns {Promise<ModelResponse>} Returns the response object.
  */
 async function verifyAccount(username, password) {
     try {

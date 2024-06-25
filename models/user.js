@@ -13,7 +13,7 @@ const database = require('../services/database'),
 /**
  * Get the user information.
  * @param {String} username Username.
- * @returns {Promise<Response>} Returns the response object.
+ * @returns {Promise<ModelResponse>} Returns the response object.
  */
 async function getInfo(username) {
     try {

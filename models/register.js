@@ -15,7 +15,7 @@ const database = require('../services/database'),
  * @param {String} username Account username.
  * @param {String} password Account password.
  * @param {String} email Account email.
- * @returns {Promise<Response>} Returns the response object.
+ * @returns {Promise<ModelResponse>} Returns the response object.
  */
 async function validateRegisterInput(username, password, email) {
     try {
@@ -58,7 +58,7 @@ async function validateRegisterInput(username, password, email) {
  * Check if the account information is duplicate.
  * @param {String} username Account username.
  * @param {String} email Account email.
- * @return {Promise<Response>} Returns the response object.
+ * @return {Promise<ModelResponse>} Returns the response object.
  */
 async function checkDuplicate(username, email) {
     try {
@@ -95,7 +95,7 @@ async function checkDuplicate(username, email) {
  * @param {String} username Account username.
  * @param {String} password Account password.
  * @param {String} email Account email.
- * @returns {Promise<Response>} Returns the response object.
+ * @returns {Promise<ModelResponse>} Returns the response object.
  */
 async function createAccount(username, password, email) {
     let user_insert_id;
