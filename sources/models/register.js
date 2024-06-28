@@ -19,6 +19,9 @@ const database = require('../services/database'),
  */
 async function validateRegisterInput(username, password, email) {
     try {
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+            throw new Error('The email address is invalid.');
+
         if (!/^[a-zA-Z0-9]+$/.test(username))
             throw new Error(
                 'The username contains invalid character(s). [a-zA-Z0-9]'
@@ -33,9 +36,6 @@ async function validateRegisterInput(username, password, email) {
             throw new Error(
                 'The password must have a minimum length of 8 characters and a maximum of 32 characters.'
             );
-
-        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
-            throw new Error('The email address is invalid.');
 
         return new Response('Successfully.', true);
     } catch (error) {
