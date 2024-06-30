@@ -11,7 +11,7 @@ const express = require('express'),
 // Authenticate a user and return a JSON Web Token (JWT) upon success.
 router.post('/', controller.authorize);
 
-// Verify a JWT token. (Debug)
+// Verify user token.
 router.post('/verifyToken', controller.verifyToken);
 
 module.exports = router;
