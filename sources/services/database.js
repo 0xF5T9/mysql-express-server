@@ -7,6 +7,11 @@
 const mysql = require('mysql2/promise'),
     config = require('../config');
 
+let connection;
+(async () => {
+    connection = await mysql.createConnection(config.database);
+})();
+
 /**
  * Executes a SQL query with optional parameters.
  * @param {String} sql - The SQL query to execute.
@@ -14,8 +19,7 @@ const mysql = require('mysql2/promise'),
  * @returns {Promise<*>} A promise resolving to an array of query results.
  */
 async function query(sql, params) {
-    const connection = await mysql.createConnection(config.database),
-        [results] = await connection.execute(sql, params);
+    const [results] = await connection.execute(sql, params);
     return results;
 }
 
