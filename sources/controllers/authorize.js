@@ -44,9 +44,6 @@ class AuthorizeController {
 
     // [POST] /authorize/verifyToken
     async verifyToken(request, response, next) {
-        if (process.env.NODE_ENV === 'production')
-            return response.status(404).json({ message: 'Not available.' });
-
         const full_token = request.get('Authorization');
         if (!full_token)
             return response
@@ -58,13 +55,16 @@ class AuthorizeController {
                 verifyResult = jwt.verify(token, process.env.SECRET_KEY);
             return response.status(200).json({
                 message: 'Successfully verified the token.',
-                verifyResult,
+                data: verifyResult,
             });
         } catch (error) {
             console.error(error);
-            return response
-                .status(401)
-                .json({ message: 'Authenticate: ' + error.message });
+            const is_expired = error.name.toLowerCase().includes('expire');
+            return response.status(401).json({
+                message: is_expired
+                    ? 'Session expired.'
+                    : 'Invalid session detected. This incident will be reported.',
+            });
         }
     }
 }
