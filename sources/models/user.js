@@ -17,7 +17,7 @@ const database = require('../services/database'),
  */
 async function getInfo(username) {
     try {
-        const sql = `SELECT username, email FROM users WHERE username = ?`;
+        const sql = `SELECT username, email, createdAt FROM users WHERE username = ?`;
 
         const result = await database.query(sql, [username]);
         if (!!!result.length)
