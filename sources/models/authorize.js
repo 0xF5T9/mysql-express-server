@@ -27,10 +27,10 @@ async function verifyAccount(username, password) {
         const result = await database.query(sql, [username, password]);
 
         if (!!!result.length)
-            throw new Error('Invalid account credentials.', false, 401);
+            throw new Error('Invalid username or password.', false, 401);
         const user = result[0];
 
-        return new Response('Account credentials verified.', true, user);
+        return new Response('Login successful.', true, user);
     } catch (error) {
         console.error(error);
         if (error.isServerError === undefined) error.isServerError = true;
@@ -65,16 +65,17 @@ function authenticate(request, response, next) {
 
         const { username } = request.params;
         if (username.toLowerCase() !== verifyResult.username.toLowerCase())
-            return response
-                .status(401)
-                .json({ message: 'Unauthorized access.' });
+            return response.status(403).json({ message: 'Access denied.' });
         request.params.username = verifyResult.username;
         next();
     } catch (error) {
         console.error(error);
-        return response
-            .status(401)
-            .json({ message: 'Authenticate: ' + error.message });
+        const is_expired = error.name.toLowerCase().includes('expire');
+        return response.status(401).json({
+            message: is_expired
+                ? 'Session expired.'
+                : 'Invalid session detected. This incident will be reported.',
+        });
     }
 }
 
