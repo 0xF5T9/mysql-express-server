@@ -9,7 +9,8 @@ const database = require('../services/database'),
     {
         ModelError: Error,
         ModelResponse: Response,
-    } = require('../utility/model');
+    } = require('../utility/model'),
+    bcrypt = require('bcrypt');
 
 /**
  * Verify account credentials.
@@ -19,16 +20,23 @@ const database = require('../services/database'),
  */
 async function verifyAccount(username, password) {
     try {
-        const sql = `SELECT c.username, u.email
+        const sql = `SELECT c.username, c.password, u.email
                      FROM credentials c JOIN users u 
                      ON c.username = u.username 
-                     WHERE c.username = ? AND BINARY c.password = ?`;
+                     WHERE c.username = ?`;
 
-        const result = await database.query(sql, [username, password]);
-
+        const result = await database.query(sql, [username]);
         if (!!!result.length)
             throw new Error('Invalid username or password.', false, 401);
-        const user = result[0];
+
+        const compare_result = await bcrypt.compare(
+            password,
+            result[0].password
+        );
+        if (!compare_result)
+            throw new Error('Invalid username or password.', false, 401);
+
+        const user = { username: result[0].username, email: result[0].email };
 
         return new Response('Login successful.', true, user);
     } catch (error) {

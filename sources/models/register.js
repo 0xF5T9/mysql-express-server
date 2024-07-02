@@ -8,7 +8,8 @@ const database = require('../services/database'),
     {
         ModelError: Error,
         ModelResponse: Response,
-    } = require('../utility/model');
+    } = require('../utility/model'),
+    bcrypt = require('bcrypt');
 
 /**
  * Validate the register input.
@@ -91,6 +92,37 @@ async function checkDuplicate(username, email) {
 }
 
 /**
+ * Hash password using bcrypt.
+ * @param {String} password Password string.
+ * @param {Number} saltRounds Salt rounds. (default: 10)
+ * @returns {Promise<ModelResponse>} Returns the response object.
+ */
+async function hashPassword(password, saltRounds = 10) {
+    try {
+        const salt = await bcrypt.genSalt(saltRounds),
+            hashedPassword = await bcrypt.hash(password, salt);
+
+        return new Response('Successfully hashed the password', true, {
+            generatedSalt: salt,
+            hashedPassword,
+        });
+    } catch (error) {
+        console.error(error);
+        if (error.isServerError === undefined) error.isServerError = true;
+
+        return new Response(
+            error.isServerError === false
+                ? error.message
+                : 'Unexpected server error has occurred.',
+            false,
+            null,
+            error.isServerError,
+            error.statusCode
+        );
+    }
+}
+
+/**
  * Create an account.
  * @param {String} username Account username.
  * @param {String} password Account password.
@@ -144,5 +176,6 @@ async function createAccount(username, password, email) {
 module.exports = {
     validateRegisterInput,
     checkDuplicate,
+    hashPassword,
     createAccount,
 };

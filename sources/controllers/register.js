@@ -36,9 +36,15 @@ class RegisterController {
                 message: duplicate_result.message,
             });
 
+        const hash_result = await models.hashPassword(password);
+        if (!hash_result.success)
+            return response.status(hash_result.statusCode).json({
+                message: hash_result.message,
+            });
+
         const register_result = await models.createAccount(
             username,
-            password,
+            hash_result.data.hashedPassword,
             email
         );
         if (!register_result.success)
