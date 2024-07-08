@@ -39,5 +39,12 @@ app.use((error, request, result, next) => {
 // Launch server.
 const port = 1284;
 app.listen(port, () => {
+    console.log(`MySQL Server started on port ${port} using following parameters:\n
+MYSQL_HOST=${process.env.MYSQL_HOST}
+MYSQL_USER=${process.env.MYSQL_USER}
+MYSQL_PASSWORD=${process.env.MYSQL_PASSWORD}
+MYSQL_DATABASE=${process.env.MYSQL_DATABASE}
+SECRET_KEY=${process.env.SECRET_KEY}
+NODE_ENV=${process.env.NODE_ENV}\n`);
     console.log(`MySQL Server is listening on port ${port}.`);
 });
