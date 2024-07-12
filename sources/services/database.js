@@ -19,6 +19,10 @@ let connection;
  * @returns {Promise<*>} A promise resolving to an array of query results.
  */
 async function query(sql, params) {
+    // BUG: Work in progress ...
+    if (!connection)
+        console.error(`BUG: 'connection' is undefined (${connection})`);
+    // BUG:
     const [results] = await connection.execute(sql, params);
     return results;
 }
