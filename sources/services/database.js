@@ -7,10 +7,9 @@
 const mysql = require('mysql2/promise'),
     config = require('../config');
 
-let connection;
-(async () => {
-    connection = await mysql.createConnection(config.database);
-})();
+async function initialize() {
+    config.connection = await mysql.createConnection(config.database);
+}
 
 /**
  * Executes a SQL query with optional parameters.
@@ -19,14 +18,11 @@ let connection;
  * @returns {Promise<*>} A promise resolving to an array of query results.
  */
 async function query(sql, params) {
-    // BUG: Work in progress ...
-    if (!connection)
-        console.error(`BUG: 'connection' is undefined (${connection})`);
-    // BUG:
-    const [results] = await connection.execute(sql, params);
+    const [results] = await config.connection.execute(sql, params);
     return results;
 }
 
 module.exports = {
+    initialize,
     query,
 };

@@ -27,6 +27,12 @@ app.use(
 const routers = require('../sources/routers');
 routers(app);
 
+// Initialize mysql.
+const {
+    initialize: mysql_initialize,
+} = require('../sources/services/database');
+mysql_initialize();
+
 // Error-handling middleware.
 app.use((error, request, result, next) => {
     console.error(

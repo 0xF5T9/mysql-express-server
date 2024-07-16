@@ -6,6 +6,7 @@
 'use strict';
 
 const config = {
+    connection: null,
     database: {
         host: process.env.MYSQL_HOST,
         user: process.env.MYSQL_USER,
