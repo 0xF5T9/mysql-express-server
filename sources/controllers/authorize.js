@@ -39,6 +39,9 @@ class AuthorizeController {
 
         return response.status(verify_result.statusCode).json({
             message: 'Successfully authorized.',
+            username: verify_result.data.username,
+            email: verify_result.data.email,
+            role: verify_result.data.role,
             token,
         });
     }
