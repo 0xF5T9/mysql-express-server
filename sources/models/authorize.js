@@ -20,7 +20,7 @@ const database = require('../services/database'),
  */
 async function verifyAccount(username, password) {
     try {
-        const sql = `SELECT c.username, c.password, u.email
+        const sql = `SELECT c.username, c.password, u.email, u.role
                      FROM credentials c JOIN users u 
                      ON c.username = u.username 
                      WHERE c.username = ?`;
@@ -36,7 +36,11 @@ async function verifyAccount(username, password) {
         if (!compare_result)
             throw new Error('Invalid username or password.', false, 401);
 
-        const user = { username: result[0].username, email: result[0].email };
+        const user = {
+            username: result[0].username,
+            email: result[0].email,
+            role: result[0].role,
+        };
 
         return new Response('Login successful.', true, user);
     } catch (error) {

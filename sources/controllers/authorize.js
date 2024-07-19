@@ -31,6 +31,7 @@ class AuthorizeController {
             {
                 username: verify_result.data.username,
                 email: verify_result.data.email,
+                role: verify_result.data.role,
             },
             process.env.SECRET_KEY,
             { expiresIn: '1h' }

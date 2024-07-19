@@ -1,16 +1,21 @@
 > MySQL Server deployed with node.js express.
+
 # Prerequisites
-* npm >= v10.5.2
-* node >= v20.13.1
-* MySQL >= v8.4.0
+
+-   npm >= v10.5.2
+-   node >= v20.13.1
+-   MySQL >= v8.4.0
 
 # Install
+
 ## 1. Install dependencies
+
 ```
 npm install
 ```
 
 ## 2. Set environment variables
+
 ```
 MYSQL_HOST=
 MYSQL_USER=
@@ -21,12 +26,14 @@ NODE_ENV=development
 ```
 
 ## 3. Create MySQL tables
+
 ```sql
 -- Users table.
 CREATE TABLE `users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+  `role` varchar(255) NOT NULL DEFAULT 'member',
   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
@@ -53,6 +60,7 @@ CREATE TABLE `posts` (
 ```
 
 # Usage
+
 ```
 npm start
 ```
