@@ -7,9 +7,9 @@
 const express = require('express'),
     router = express.Router(),
     controller = require('../controllers/user'),
-    { authenticate } = require('../models/authorize');
+    { authenticateUsername } = require('../models/authorize');
 
 // Get user information.
-router.get('/:username', authenticate, controller.getInfo);
+router.get('/:username', authenticateUsername, controller.getInfo);
 
 module.exports = router;

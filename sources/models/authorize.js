@@ -60,13 +60,14 @@ async function verifyAccount(username, password) {
 }
 
 /**
- * Authenticate middleware for protect API endpoints from unauthorized access.
+ * Middleware that ensures the 'username' parameter is authentic.
+ * @note Authenticate middleware for protect API endpoints from unauthorized access.
  * @param {Object} request Express middleware request object.
  * @param {Object} response Express middleware response object.
  * @param {Function} next Express middleware next() function.
  * @returns {Object} Returns the response object.
  */
-function authenticate(request, response, next) {
+function authenticateUsername(request, response, next) {
     const full_token = request.get('Authorization');
     if (!full_token)
         return response.status(400).json({ message: 'No token was provided.' });
@@ -91,7 +92,39 @@ function authenticate(request, response, next) {
     }
 }
 
+/**
+ * Middleware that ensures the user is an admin user.
+ * @note Authenticate middleware for protect API endpoints from unauthorized access.
+ * @param {Object} request Express middleware request object.
+ * @param {Object} response Express middleware response object.
+ * @param {Function} next Express middleware next() function.
+ * @returns {Object} Returns the response object.
+ */
+function authenticateAdmin(request, response, next) {
+    const full_token = request.get('Authorization');
+    if (!full_token)
+        return response.status(400).json({ message: 'No token was provided.' });
+
+    try {
+        const token = full_token.split(' ')[1],
+            verifyResult = jwt.verify(token, process.env.SECRET_KEY);
+
+        if (verifyResult.role !== 'admin')
+            return response.status(403).json({ message: 'Access denied.' });
+        next();
+    } catch (error) {
+        console.error(error);
+        const is_expired = error.name.toLowerCase().includes('expire');
+        return response.status(401).json({
+            message: is_expired
+                ? 'Session expired.'
+                : 'Invalid session detected. This incident will be reported.',
+        });
+    }
+}
+
 module.exports = {
     verifyAccount,
-    authenticate,
+    authenticateUsername,
+    authenticateAdmin,
 };
