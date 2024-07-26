@@ -17,8 +17,8 @@ const express = require('express'),
 
 // Global rate limiter.
 const limiter = rateLimit({
-    // 300 requests per 15 minutes.
-    windowMs: 15 * 60 * 1000,
+    // 300 requests per 1 minutes.
+    windowMs: 1 * 60 * 1000,
     limit: 300,
     standardHeaders: 'draft-7',
     legacyHeaders: false,
