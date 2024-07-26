@@ -11,7 +11,7 @@ const express = require('express'),
 const { rateLimit } = require('express-rate-limit'),
     authorizeLimiter = rateLimit({
         // 10 requests per 1 minutes.
-        windowMs: 60 * 60 * 1000,
+        windowMs: 1 * 60 * 1000,
         limit: 10,
         standardHeaders: 'draft-7',
         legacyHeaders: true,
