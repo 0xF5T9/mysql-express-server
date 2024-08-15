@@ -8,7 +8,7 @@ const mysql = require('mysql2/promise'),
     config = require('../config');
 
 async function initialize() {
-    config.connection = await mysql.createConnection(config.database);
+    config.connection = await mysql.createPool(config.database);
 }
 
 /**
