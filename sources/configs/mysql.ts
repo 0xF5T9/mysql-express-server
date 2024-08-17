@@ -1,19 +1,23 @@
 /**
- * @file config.js
- * @description Server configuration.
+ * @file mysql.ts
+ * @description MySQL Server configuration.
  */
 
 'use strict';
+import mysql from 'mysql2/promise';
 
-const config = {
-    connection: null,
-    database: {
+const mysqlConfig: {
+    pool: mysql.Pool;
+    poolOptions: mysql.PoolOptions;
+    readonly defaultPagination: number;
+} = {
+    pool: null,
+    poolOptions: {
         host: process.env.MYSQL_HOST,
         user: process.env.MYSQL_USER,
         password: process.env.MYSQL_PASSWORD,
         database: process.env.MYSQL_DATABASE,
         connectTimeout: 60000,
-        acquireTimeout: 60000,
         waitForConnections: true,
         connectionLimit: 100,
         maxIdle: 100,
@@ -22,7 +26,7 @@ const config = {
         enableKeepAlive: true,
         keepAliveInitialDelay: 10000,
     },
-    itemPerPage: 10,
+    defaultPagination: 10,
 };
 
-module.exports = config;
+export default mysqlConfig;

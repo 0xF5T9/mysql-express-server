@@ -21,8 +21,10 @@ MYSQL_HOST=
 MYSQL_USER=
 MYSQL_PASSWORD=
 MYSQL_DATABASE=
-SECRET_KEY=
+JWT_EXPIRES_IN=
+JWT_SECRET_KEY=
 NODE_ENV=development
+PORT=1284
 ```
 
 ## 3. Create MySQL tables
@@ -38,7 +40,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-)
+);
 
 -- Credentials table.
 CREATE TABLE `credentials` (
@@ -56,7 +58,7 @@ CREATE TABLE `posts` (
   `title` varchar(255) DEFAULT NULL,
   `text` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-)
+);
 ```
 
 # Usage

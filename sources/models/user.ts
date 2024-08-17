@@ -1,31 +1,28 @@
 /**
- * @file user.js
+ * @file user.ts
  * @description User router models.
  */
 
 'use strict';
-const database = require('../services/database'),
-    {
-        ModelError: Error,
-        ModelResponse: Response,
-    } = require('../utility/model');
+import { query } from '../services/database';
+import { ModelError, ModelResponse } from '../utility/model';
 
 /**
  * Get the user information.
- * @param {String} username Username.
- * @returns {Promise<ModelResponse>} Returns the response object.
+ * @param username Username.
+ * @returns Returns the response object.
  */
-async function getInfo(username) {
+async function getInfo(username: string) {
     try {
         const sql = `SELECT username, email, role, createdAt FROM users WHERE username = ?`;
 
-        const result = await database.query(sql, [username]);
+        const result: any = await query(sql, [username]);
         if (!!!result.length)
-            throw new Error('No user information were found.', true);
+            throw new ModelError('No user information were found.', true, 500);
 
         const user_info = result[0];
 
-        return new Response(
+        return new ModelResponse(
             'Successfully retrieved the user information.',
             true,
             user_info
@@ -34,7 +31,7 @@ async function getInfo(username) {
         console.error(error);
         if (error.isServerError === undefined) error.isServerError = true;
 
-        return new Response(
+        return new ModelResponse(
             error.isServerError === false
                 ? error.message
                 : 'Unexpeced server error has occurred.',
@@ -46,6 +43,4 @@ async function getInfo(username) {
     }
 }
 
-module.exports = {
-    getInfo,
-};
+export default { getInfo };

@@ -1,17 +1,18 @@
 /**
- * @file register.js
+ * @file register.ts
  * @description Register router controller.
  */
 
 'use strict';
-const models = require('../models/register');
+import { RequestHandler } from 'express';
+import model from '../models/register';
 
 /**
  * Register router controller.
  */
 class RegisterController {
     // [POST] /register
-    async register(request, response, next) {
+    register: RequestHandler = async (request, response, next) => {
         const { username, password, email } = request.body;
 
         if (!username || !password || !email)
@@ -20,7 +21,7 @@ class RegisterController {
                     'Account information was not provided or was incomplete.',
             });
 
-        const input_validate_result = await models.validateRegisterInput(
+        const input_validate_result = await model.validateRegisterInput(
             username,
             password,
             email
@@ -30,19 +31,19 @@ class RegisterController {
                 message: input_validate_result.message,
             });
 
-        const duplicate_result = await models.checkDuplicate(username, email);
+        const duplicate_result = await model.checkDuplicate(username, email);
         if (!duplicate_result.success)
             return response.status(duplicate_result.statusCode).json({
                 message: duplicate_result.message,
             });
 
-        const hash_result = await models.hashPassword(password);
+        const hash_result = await model.hashPassword(password);
         if (!hash_result.success)
             return response.status(hash_result.statusCode).json({
                 message: hash_result.message,
             });
 
-        const register_result = await models.createAccount(
+        const register_result = await model.createAccount(
             username,
             hash_result.data.hashedPassword,
             email
@@ -55,7 +56,7 @@ class RegisterController {
         return response.status(201).json({
             message: 'Successfully registered the account.',
         });
-    }
+    };
 }
 
-module.exports = new RegisterController();
+export default new RegisterController();

@@ -1,20 +1,23 @@
 /**
- * @file test.js
+ * @file test.ts
  * @description Test router controller.
  */
 
 'use strict';
-const models = require('../models/test');
+import { RequestHandler } from 'express';
+import model from '../models/test';
 
 /**
  * Test router controller.
  */
 class TestController {
     // [GET] /test/posts
-    async getTestPosts(request, response, next) {
+    getTestPosts: RequestHandler = async (request, response, next) => {
         const { page } = request.query;
 
-        const posts_result = await models.getPosts(page);
+        const posts_result = await model.getPosts(
+            parseInt(page as string) || undefined
+        );
         if (!posts_result.success)
             return response.status(posts_result.statusCode).json({
                 message: posts_result.message,
@@ -24,7 +27,7 @@ class TestController {
             message: 'Successfully.',
             data: posts_result.data,
         });
-    }
+    };
 }
 
-module.exports = new TestController();
+export default new TestController();

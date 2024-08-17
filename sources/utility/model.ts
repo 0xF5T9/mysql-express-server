@@ -1,5 +1,5 @@
 /**
- * @file model.js
+ * @file model.ts
  * @description Utility classes and functions used by models.
  */
 
@@ -9,14 +9,17 @@
  * Model error object.
  */
 class ModelError extends Error {
+    isServerError: boolean;
+    statusCode: number;
+
     /**
      * Constructs a model error object.
-     * @param {String} [message=''] Error message.
-     * @param {Boolean=} [isServerError=false] Specifies whether a server error has occurred.
-     * @param {Number=} [statusCode=undefined] Specifies a specific http status code for the error.
-     * @returns {Object} Returns the error object.
+     * @param message Error message.
+     * @param isServerError Specifies whether a server error has occurred.
+     * @param statusCode Specifies a specific http status code for the error.
+     * @returns Returns the model error object.
      */
-    constructor(message = '', isServerError = false, statusCode = undefined) {
+    constructor(message: string, isServerError: boolean, statusCode: number) {
         super(message);
         this.message = message;
         this.isServerError = isServerError;
@@ -28,22 +31,28 @@ class ModelError extends Error {
  * Model response object.
  */
 class ModelResponse {
+    message: string;
+    success: boolean;
+    data: any;
+    isServerError: boolean;
+    statusCode: number;
+
     /**
      * Constructs a model response object.
-     * @param {String} [message=''] Response message.
-     * @param {Boolean} [success=false] Specifies whether the action is successful.
-     * @param {Object=} [data=null] Response associated data.
-     * @param {Boolean=} [isServerError=false] Specifies whether a server error has occurred.
-     * @param {Number=} [statusCode=undefined] Specifies a specific http status code.
+     * @param message Response message.
+     * @param success Specifies whether the action is successful.
+     * @param data Response associated data.
+     * @param isServerError Specifies whether a server error has occurred.
+     * @param statusCode Specifies a specific http status code.
      *                                         If not specified, it will be automatically filled in.
-     * @returns {Object} Returns the response object.
+     * @returns Returns the model response object.
      */
     constructor(
-        message = '',
-        success = false,
-        data = null,
-        isServerError = false,
-        statusCode = undefined
+        message: string,
+        success: boolean,
+        data: any,
+        isServerError: boolean = false,
+        statusCode?: number
     ) {
         this.message = message;
         this.success = success;
@@ -62,20 +71,20 @@ class ModelResponse {
 /**
  * Calculates the offset for pagination based
  * on the current page and items per page.
- * @param {Number} [currentPage=1] Current page.
- * @param {Number} itemPerPage Item per page.
- * @returns {Number} The calculated offset for pagination.
+ * @param currentPage Current page.
+ * @param itemPerPage Item per page.
+ * @returns The calculated offset for pagination.
  */
-function getOffset(currentPage = 1, itemPerPage) {
+function getOffset(currentPage: number = 1, itemPerPage: number) {
     return (currentPage - 1) * itemPerPage;
 }
 
 /**
  * Check if a string is a valid date format string. (yyyy-mm-dd)
- * @param {String} stringDate Date string.
- * @returns {Boolean} Returns true if the string is a valid date format string, otherwise returns false.
+ * @param stringDate Date string.
+ * @returns Returns true if the string is a valid date format string, otherwise returns false.
  */
-function isValidDate(stringDate) {
+function isValidDate(stringDate: string) {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
     if (!regex.test(stringDate)) {
         return false;
@@ -91,9 +100,4 @@ function isValidDate(stringDate) {
     );
 }
 
-module.exports = {
-    ModelError,
-    ModelResponse,
-    getOffset,
-    isValidDate,
-};
+export { ModelError, ModelResponse, getOffset, isValidDate };

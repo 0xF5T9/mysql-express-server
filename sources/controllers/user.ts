@@ -1,20 +1,21 @@
 /**
- * @file user.js
+ * @file user.ts
  * @description User router controller.
  */
 
 'use strict';
-const models = require('../models/user');
+import { RequestHandler } from 'express';
+import model from '../models/user';
 
 /**
  * User router controller.
  */
 class UserController {
     // [GET] /user/:username
-    async getInfo(request, response, next) {
+    getInfo: RequestHandler = async (request, response, next) => {
         const { username } = request.params;
 
-        const user_result = await models.getInfo(username);
+        const user_result = await model.getInfo(username);
         if (!user_result.success)
             return response.status(user_result.statusCode).json({
                 message: user_result.message,
@@ -24,7 +25,7 @@ class UserController {
             message: user_result.message,
             data: user_result.data,
         });
-    }
+    };
 }
 
-module.exports = new UserController();
+export default new UserController();
