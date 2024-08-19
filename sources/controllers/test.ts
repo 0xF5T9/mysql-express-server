@@ -15,17 +15,17 @@ class TestController {
     getTestPosts: RequestHandler = async (request, response, next) => {
         const { page } = request.query;
 
-        const posts_result = await model.getPosts(
+        const postsResult = await model.getPosts(
             parseInt(page as string) || undefined
         );
-        if (!posts_result.success)
-            return response.status(posts_result.statusCode).json({
-                message: posts_result.message,
+        if (!postsResult.success)
+            return response.status(postsResult.statusCode).json({
+                message: postsResult.message,
             });
 
-        return response.status(posts_result.statusCode).json({
+        return response.status(postsResult.statusCode).json({
             message: 'Successfully.',
-            data: posts_result.data,
+            data: postsResult.data,
         });
     };
 }

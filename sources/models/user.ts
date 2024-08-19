@@ -20,12 +20,12 @@ async function getInfo(username: string) {
         if (!!!result.length)
             throw new ModelError('No user information were found.', true, 500);
 
-        const user_info = result[0];
+        const userInfo = result[0];
 
         return new ModelResponse(
             'Successfully retrieved the user information.',
             true,
-            user_info
+            userInfo
         );
     } catch (error) {
         console.error(error);

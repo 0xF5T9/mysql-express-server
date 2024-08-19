@@ -22,28 +22,28 @@ class AuthorizeController {
                     'Credential information was not provided or was incomplete.',
             });
 
-        const verify_result = await model.verifyAccount(username, password);
-        if (!verify_result.success)
+        const verifyResult = await model.verifyAccount(username, password);
+        if (!verifyResult.success)
             return response
-                .status(verify_result.statusCode)
-                .json({ message: verify_result.message });
+                .status(verifyResult.statusCode)
+                .json({ message: verifyResult.message });
 
         const token = jwt.sign(
             {
-                username: verify_result.data.username,
-                email: verify_result.data.email,
-                role: verify_result.data.role,
+                username: verifyResult.data.username,
+                email: verifyResult.data.email,
+                role: verifyResult.data.role,
             },
             process.env.JWT_SECRET_KEY,
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );
 
-        return response.status(verify_result.statusCode).json({
+        return response.status(verifyResult.statusCode).json({
             message: 'Successfully authorized.',
             data: {
-                username: verify_result.data.username,
-                email: verify_result.data.email,
-                role: verify_result.data.role,
+                username: verifyResult.data.username,
+                email: verifyResult.data.email,
+                role: verifyResult.data.role,
                 token,
             },
         });
@@ -51,14 +51,14 @@ class AuthorizeController {
 
     // [POST] /authorize/verifyToken
     verifyToken: RequestHandler = async (request, response, next) => {
-        const full_token = request.get('Authorization');
-        if (!full_token)
+        const fullToken = request.get('Authorization');
+        if (!fullToken)
             return response
                 .status(400)
                 .json({ message: 'No token was provided.' });
 
         try {
-            const token = full_token.split(' ')[1],
+            const token = fullToken.split(' ')[1],
                 verifyResult = jwt.verify(token, process.env.JWT_SECRET_KEY);
             return response.status(200).json({
                 message: 'Successfully verified the token.',
@@ -66,9 +66,9 @@ class AuthorizeController {
             });
         } catch (error) {
             console.error(error);
-            const is_expired = error.name.toLowerCase().includes('expire');
+            const isExpired = error.name.toLowerCase().includes('expire');
             return response.status(401).json({
-                message: is_expired
+                message: isExpired
                     ? 'Session expired.'
                     : 'Invalid session detected. This incident will be reported.',
             });

@@ -27,11 +27,11 @@ async function verifyAccount(username: string, password: string) {
         if (!!!result.length)
             throw new ModelError('Invalid username or password.', false, 401);
 
-        const compare_result = await bcrypt.compare(
+        const compareResult = await bcrypt.compare(
             password,
             result[0].password
         );
-        if (!compare_result)
+        if (!compareResult)
             throw new ModelError('Invalid username or password.', false, 401);
 
         const user = {
@@ -66,12 +66,12 @@ async function verifyAccount(username: string, password: string) {
  * @returns Returns the response object.
  */
 const authenticateUsername: RequestHandler = (request, response, next) => {
-    const full_token = request.get('Authorization');
-    if (!full_token)
+    const fullToken = request.get('Authorization');
+    if (!fullToken)
         return response.status(400).json({ message: 'No token was provided.' });
 
     try {
-        const token = full_token.split(' ')[1],
+        const token = fullToken.split(' ')[1],
             verifyResult: any = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
         const { username } = request.params;
@@ -81,9 +81,9 @@ const authenticateUsername: RequestHandler = (request, response, next) => {
         next();
     } catch (error) {
         console.error(error);
-        const is_expired = error.name.toLowerCase().includes('expire');
+        const isExpired = error.name.toLowerCase().includes('expire');
         return response.status(401).json({
-            message: is_expired
+            message: isExpired
                 ? 'Session expired.'
                 : 'Invalid session detected. This incident will be reported.',
         });
@@ -99,12 +99,12 @@ const authenticateUsername: RequestHandler = (request, response, next) => {
  * @returns {Object} Returns the response object.
  */
 const authenticateAdmin: RequestHandler = (request, response, next) => {
-    const full_token = request.get('Authorization');
-    if (!full_token)
+    const fullToken = request.get('Authorization');
+    if (!fullToken)
         return response.status(400).json({ message: 'No token was provided.' });
 
     try {
-        const token = full_token.split(' ')[1],
+        const token = fullToken.split(' ')[1],
             verifyResult: any = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
         if (verifyResult.role !== 'admin')
@@ -112,9 +112,9 @@ const authenticateAdmin: RequestHandler = (request, response, next) => {
         next();
     } catch (error) {
         console.error(error);
-        const is_expired = error.name.toLowerCase().includes('expire');
+        const isExpired = error.name.toLowerCase().includes('expire');
         return response.status(401).json({
-            message: is_expired
+            message: isExpired
                 ? 'Session expired.'
                 : 'Invalid session detected. This incident will be reported.',
         });

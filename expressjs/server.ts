@@ -13,7 +13,7 @@ import express, { ErrorRequestHandler } from 'express';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import routers from '../sources/routers';
-import { initialize as mysql_initialize } from '../sources/services/database';
+import { initialize as mysqlInitialize } from '../sources/services/database';
 
 const app = express();
 
@@ -46,7 +46,7 @@ app.use(
 routers(app);
 
 // Initialize mysql.
-mysql_initialize();
+mysqlInitialize();
 
 // Error-handling middleware.
 const errorHandler: ErrorRequestHandler = function (

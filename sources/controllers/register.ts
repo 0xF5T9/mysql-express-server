@@ -21,37 +21,37 @@ class RegisterController {
                     'Account information was not provided or was incomplete.',
             });
 
-        const input_validate_result = await model.validateRegisterInput(
+        const inputValidateResult = await model.validateRegisterInput(
             username,
             password,
             email
         );
-        if (!input_validate_result.success)
-            return response.status(input_validate_result.statusCode).json({
-                message: input_validate_result.message,
+        if (!inputValidateResult.success)
+            return response.status(inputValidateResult.statusCode).json({
+                message: inputValidateResult.message,
             });
 
-        const duplicate_result = await model.checkDuplicate(username, email);
-        if (!duplicate_result.success)
-            return response.status(duplicate_result.statusCode).json({
-                message: duplicate_result.message,
+        const duplicateResult = await model.checkDuplicate(username, email);
+        if (!duplicateResult.success)
+            return response.status(duplicateResult.statusCode).json({
+                message: duplicateResult.message,
             });
 
-        const hash_result = await model.hashPassword(password);
-        if (!hash_result.success)
-            return response.status(hash_result.statusCode).json({
-                message: hash_result.message,
+        const hashResult = await model.hashPassword(password);
+        if (!hashResult.success)
+            return response.status(hashResult.statusCode).json({
+                message: hashResult.message,
             });
 
-        const register_result = await model.createAccount(
+        const registerResult = await model.createAccount(
             username,
-            hash_result.data.hashedPassword,
+            hashResult.data.hashedPassword,
             email
         );
-        if (!register_result.success)
+        if (!registerResult.success)
             return response
-                .status(register_result.statusCode)
-                .json({ message: register_result.message });
+                .status(registerResult.statusCode)
+                .json({ message: registerResult.message });
 
         return response.status(201).json({
             message: 'Successfully registered the account.',

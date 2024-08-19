@@ -70,14 +70,14 @@ async function validateRegisterInput(
  */
 async function checkDuplicate(username: string, email: string) {
     try {
-        const username_sql = `SELECT id FROM users WHERE username = ?`,
-            username_result: any = await query(username_sql, [username]);
-        if (username_result.length)
+        const usernameSql = `SELECT id FROM users WHERE username = ?`,
+            usernameResult: any = await query(usernameSql, [username]);
+        if (usernameResult.length)
             throw new ModelError('Username already exists.', false, 400);
 
-        const email_sql = `SELECT id FROM users WHERE email = ?`,
-            email_result: any = await query(email_sql, [email]);
-        if (email_result.length)
+        const emailSql = `SELECT id FROM users WHERE email = ?`,
+            emailResult: any = await query(emailSql, [email]);
+        if (emailResult.length)
             throw new ModelError('Email already exists.', false, 400);
 
         return new ModelResponse(
@@ -144,24 +144,24 @@ async function createAccount(
     password: string,
     email: string
 ) {
-    let user_insert_id;
+    let userInsertId;
     try {
-        const sql_user = `INSERT INTO users (username, email) VALUES (?, ?)`,
-            user_result: any = await query(sql_user, [username, email]);
-        if (!user_result.affectedRows)
+        const sqlUser = `INSERT INTO users (username, email) VALUES (?, ?)`,
+            userResult: any = await query(sqlUser, [username, email]);
+        if (!userResult.affectedRows)
             throw new ModelError(
                 'Failed to insert user record to the database.',
                 true,
                 500
             );
-        user_insert_id = user_result.insertId;
+        userInsertId = userResult.insertId;
 
-        const sql_credentials = `INSERT INTO credentials (password, username) VALUES (?, ?)`,
-            credentials_result: any = await query(sql_credentials, [
+        const sqlCredentials = `INSERT INTO credentials (password, username) VALUES (?, ?)`,
+            credentialsResult: any = await query(sqlCredentials, [
                 password,
                 username,
             ]);
-        if (!credentials_result.affectedRows)
+        if (!credentialsResult.affectedRows)
             throw new ModelError(
                 'Failed to insert user credential record to the database.',
                 true,
@@ -174,8 +174,8 @@ async function createAccount(
             null
         );
     } catch (error) {
-        if (user_insert_id)
-            await query(`DELETE FROM users WHERE id = ${user_insert_id}`);
+        if (userInsertId)
+            await query(`DELETE FROM users WHERE id = ${userInsertId}`);
         console.error(error);
         if (error.isServerError === undefined) error.isServerError = true;
 
