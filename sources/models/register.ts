@@ -38,7 +38,7 @@ async function validateRegisterInput(
                 400
             );
 
-        if (password.length < 8 || username.length > 32)
+        if (password.length < 8 || password.length > 32)
             throw new ModelError(
                 'The password must have a minimum length of 8 characters and a maximum of 32 characters.',
                 false,
