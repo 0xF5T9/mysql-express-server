@@ -7,6 +7,7 @@
 import { RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 import model from '../models/authorize';
+import jwtConfig from '../../configs/jwt.json';
 
 /**
  * Authorize router controller.
@@ -34,8 +35,8 @@ class AuthorizeController {
                 email: verifyResult.data.email,
                 role: verifyResult.data.role,
             },
-            process.env.JWT_SECRET_KEY,
-            { expiresIn: process.env.JWT_EXPIRES_IN }
+            verifyResult.data.password,
+            { expiresIn: jwtConfig.jwtAuthorizeTokenExpiresIn }
         );
 
         return response.status(verifyResult.statusCode).json({

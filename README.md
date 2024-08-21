@@ -14,18 +14,9 @@
 npm install
 ```
 
-## 2. Set environment variables
+## 2. Configures the project
 
-```
-MYSQL_HOST=
-MYSQL_USER=
-MYSQL_PASSWORD=
-MYSQL_DATABASE=
-JWT_EXPIRES_IN=
-JWT_SECRET_KEY=
-NODE_ENV=development
-PORT=1284
-```
+Checkout the project configuration files in `./configs` folder.
 
 ## 3. Create MySQL tables
 

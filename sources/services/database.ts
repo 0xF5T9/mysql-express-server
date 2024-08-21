@@ -5,13 +5,14 @@
 
 'use strict';
 import mysql from 'mysql2/promise';
-import mysqlConfig from '../configs/mysql';
+import mysqlConfig from '../../configs/mysql.json';
+import mysqlGlobal from '../global/mysql';
 
 /**
  * Initialize mysql server.
  */
 async function initialize() {
-    mysqlConfig.pool = await mysql.createPool(mysqlConfig.poolOptions);
+    mysqlGlobal.pool = await mysql.createPool(mysqlConfig.poolOptions);
 }
 
 /**
@@ -21,7 +22,7 @@ async function initialize() {
  * @returns A promise resolving to an array of query results.
  */
 async function query(sql: string, params?: string[]) {
-    const [results] = await mysqlConfig.pool.execute(sql, params);
+    const [results] = await mysqlGlobal.pool.execute(sql, params);
     return results;
 }
 

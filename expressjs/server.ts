@@ -14,6 +14,7 @@ import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 import routers from '../sources/routers';
 import { initialize as mysqlInitialize } from '../sources/services/database';
+import expressConfig from '../configs/express.json';
 
 const app = express();
 
@@ -61,6 +62,6 @@ const errorHandler: ErrorRequestHandler = function (
 app.use(errorHandler);
 
 // Launch server.
-app.listen(process.env.PORT, () => {
-    console.log(`Application is listening on port ${process.env.PORT}.`);
+app.listen(expressConfig.port, () => {
+    console.log(`Application is listening on port ${expressConfig.port}.`);
 });

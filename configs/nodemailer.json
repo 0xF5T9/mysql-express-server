@@ -1,0 +1,17 @@
+{
+    "transporterOptions": {
+        "service": "gmail",
+        "host": "smtp.google.com",
+        "port": 465,
+        "secure": true,
+        "auth": {
+            "user": "",
+            "pass": ""
+        }
+    },
+    "resetPasswordSendMailOptions": {
+        "from": "no-reply <from@gmail.com>",
+        "subject": "Reset Password",
+        "frontEndDomain": "https://mywebsite.com"
+    }
+}
