@@ -52,28 +52,17 @@ class AuthorizeController {
 
     // [POST] /authorize/verifyToken
     verifyToken: RequestHandler = async (request, response, next) => {
-        const fullToken = request.get('Authorization');
-        if (!fullToken)
-            return response
-                .status(400)
-                .json({ message: 'No token was provided.' });
+        const { token } = request.body;
 
-        try {
-            const token = fullToken.split(' ')[1],
-                verifyResult = jwt.verify(token, process.env.JWT_SECRET_KEY);
-            return response.status(200).json({
-                message: 'Successfully verified the token.',
-                data: verifyResult,
-            });
-        } catch (error) {
-            console.error(error);
-            const isExpired = error.name.toLowerCase().includes('expire');
-            return response.status(401).json({
-                message: isExpired
-                    ? 'Session expired.'
-                    : 'Invalid session detected. This incident will be reported.',
-            });
-        }
+        const verifyResult = await model.verifyToken(token);
+        if (!verifyResult.success)
+            return response
+                .status(verifyResult.statusCode)
+                .json({ message: verifyResult.message });
+
+        return response
+            .status(verifyResult.statusCode)
+            .json({ message: verifyResult.message, data: verifyResult.data });
     };
 }
 

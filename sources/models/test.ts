@@ -7,7 +7,7 @@
 import nodemailer from 'nodemailer';
 import { query } from '../services/database';
 import { ModelError, ModelResponse, getOffset } from '../utility/model';
-import mysqlConfig from '../configs/mysql';
+import mysqlConfig from '../../configs/mysql.json';
 
 /**
  * Get the posts.

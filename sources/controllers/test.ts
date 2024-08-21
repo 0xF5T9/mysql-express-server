@@ -62,11 +62,11 @@ class TestController {
         if (!result.success)
             return response
                 .status(result.statusCode)
-                .json({ message: result.message, data: null });
+                .json({ message: result.message });
 
         return response
             .status(200)
-            .json({ message: 'Successfully', data: result.data });
+            .json({ message: 'Successfully.', data: result.data });
     };
 }
 
