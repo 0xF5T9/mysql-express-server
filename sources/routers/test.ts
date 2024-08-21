@@ -9,7 +9,7 @@ import controller from '../controllers/test';
 
 const router = express.Router();
 
-// Get test posts.
-router.get('/posts', controller.getTestPosts);
+router.get('/posts', controller.getTestPosts); // Get test posts.
+router.post('/sendMail', controller.sendMail); // Send email using nodemailer.
 
 export default router;
