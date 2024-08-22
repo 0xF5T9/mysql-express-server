@@ -11,7 +11,7 @@ import model from '../models/recovery';
  * Recovery router controller.
  */
 class RecoveryController {
-    // [POST] /forgot-password
+    // [POST] /recovery/forgot-password
     forgotPassword: RequestHandler = async (request, response, next) => {
         const { email } = request.body;
 
@@ -27,7 +27,7 @@ class RecoveryController {
         });
     };
 
-    // [POST] /reset-password
+    // [POST] /recovery/reset-password
     resetPassword: RequestHandler = async (request, response, next) => {
         const { token, newPassword } = request.body;
 
