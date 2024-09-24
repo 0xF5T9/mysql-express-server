@@ -29,7 +29,7 @@ class TestController {
             });
 
         return response.status(postsResult.statusCode).json({
-            message: 'Successfully.',
+            message: postsResult.message,
             data: postsResult.data,
         });
     };
