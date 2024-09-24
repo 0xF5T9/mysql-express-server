@@ -13,10 +13,15 @@ import model from '../models/test';
 class TestController {
     // [GET] /test/posts
     getTestPosts: RequestHandler = async (request, response, next) => {
-        const { page } = request.query;
+        const query: { page?: string; itemPerPage?: string } = {
+            ...request.query,
+        },
+        page = parseInt(query.page),
+        itemPerPage = parseInt(query.itemPerPage);
 
         const postsResult = await model.getPosts(
-            parseInt(page as string) || undefined
+            page || undefined,
+            itemPerPage || undefined
         );
         if (!postsResult.success)
             return response.status(postsResult.statusCode).json({

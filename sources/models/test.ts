@@ -11,28 +11,44 @@ import mysqlConfig from '../../configs/mysql.json';
 
 /**
  * Get the posts.
- * @param Pagination.
+ * @param page Pagination.
+ * @param itemPerPage Item per page.
  * @returns Returns the response object.
  */
-async function getPosts(page: number = 1) {
+async function getPosts(page: number = 1, itemPerPage: number = 12) {
     try {
-        const offset = getOffset(page, mysqlConfig.defaultPagination),
-            sql = `SELECT title, text FROM posts LIMIT ?, ?`;
+        const offset = getOffset(page, itemPerPage);
+        
+        const itemsQueryResult = await query(`SELECT title, text FROM posts LIMIT ?, ?`, [`${offset}`, `${itemPerPage}`]),
+        posts = itemsQueryResult || [];
 
-        const result: any = await query(sql, [
-            `${offset}`,
-            `${mysqlConfig.defaultPagination}`,
-        ]);
+        const totalItemsQueryResult = await query(
+            `SELECT COUNT(*) AS total_items from posts`
+        ),
+        totalPosts = (totalItemsQueryResult as any[])[0].total_items;
 
-        const posts = result || [],
-            meta = { page, totalPosts: result.length };
+        const prevPage = Math.max(1, page - 1),
+            nextPage = Math.min(
+                Math.ceil(totalPosts / itemPerPage),
+                page + 1
+            );
+
+        const meta = {
+                page,
+                itemPerPage,
+                totalItems: totalPosts,
+                isFirstPage: page === 1,
+                isLastPage: page === nextPage,
+                prevPage: `/test/posts?page=${prevPage}&itemPerPage=${itemPerPage}`,
+                nextPage: `/test/posts?page=${nextPage}&itemPerPage=${itemPerPage}`,
+            };
 
         return new ModelResponse(
-            'Successfully retrieved the posts data.',
+            'Successfully retrieved the data.',
             true,
             {
-                posts,
                 meta,
+                posts,
             }
         );
     } catch (error) {
