@@ -18,39 +18,38 @@ import mysqlConfig from '../../configs/mysql.json';
 async function getPosts(page: number = 1, itemPerPage: number = 12) {
     try {
         const offset = getOffset(page, itemPerPage);
-        
-        const itemsQueryResult = await query(`SELECT title, text FROM posts LIMIT ?, ?`, [`${offset}`, `${itemPerPage}`]),
-        posts = itemsQueryResult || [];
+
+        const itemsQueryResult = await query(
+                `SELECT title, text FROM posts LIMIT ?, ?`,
+                [`${offset}`, `${itemPerPage}`]
+            ),
+            posts = itemsQueryResult || [];
 
         const totalItemsQueryResult = await query(
-            `SELECT COUNT(*) AS total_items from posts`
-        ),
-        totalPosts = (totalItemsQueryResult as any[])[0].total_items;
+                `SELECT COUNT(*) AS total_items from posts`
+            ),
+            totalPosts = (totalItemsQueryResult as any[])[0].total_items;
 
         const prevPage = Math.max(1, page - 1),
-            nextPage = Math.min(
-                Math.ceil(totalPosts / itemPerPage),
-                page + 1
+            nextPage = Math.max(
+                1,
+                Math.min(Math.ceil(totalPosts / itemPerPage), page + 1)
             );
 
         const meta = {
-                page,
-                itemPerPage,
-                totalItems: totalPosts,
-                isFirstPage: page === 1,
-                isLastPage: page === nextPage,
-                prevPage: `/test/posts?page=${prevPage}&itemPerPage=${itemPerPage}`,
-                nextPage: `/test/posts?page=${nextPage}&itemPerPage=${itemPerPage}`,
-            };
+            page,
+            itemPerPage,
+            totalItems: totalPosts,
+            isFirstPage: page === 1,
+            isLastPage: page === nextPage,
+            prevPage: `/test/posts?page=${prevPage}&itemPerPage=${itemPerPage}`,
+            nextPage: `/test/posts?page=${nextPage}&itemPerPage=${itemPerPage}`,
+        };
 
-        return new ModelResponse(
-            'Successfully retrieved the data.',
-            true,
-            {
-                meta,
-                posts,
-            }
-        );
+        return new ModelResponse('Successfully retrieved the data.', true, {
+            meta,
+            posts,
+        });
     } catch (error) {
         console.error(error);
         if (error.isServerError === undefined) error.isServerError = true;

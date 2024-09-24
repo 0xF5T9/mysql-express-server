@@ -14,10 +14,10 @@ class TestController {
     // [GET] /test/posts
     getTestPosts: RequestHandler = async (request, response, next) => {
         const query: { page?: string; itemPerPage?: string } = {
-            ...request.query,
-        },
-        page = parseInt(query.page),
-        itemPerPage = parseInt(query.itemPerPage);
+                ...request.query,
+            },
+            page = parseInt(query.page),
+            itemPerPage = parseInt(query.itemPerPage);
 
         const postsResult = await model.getPosts(
             page || undefined,
